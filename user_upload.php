@@ -39,5 +39,13 @@ if ($conn->query($sql) === TRUE) {
     echo "Error creating table: " . $conn->error;
 }
 
+define('CSV_PATH','C:/wamp/www/catalyst/');
+
+$csv_file = CSV_PATH . $filename;
+
+if(!file_exists($csv_file)) {
+    die("File not found. Make sure you specified the correct path.");
+}
+
 $conn->close();
 ?>
