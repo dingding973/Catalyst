@@ -8,7 +8,7 @@ $fieldseparator = ",";
 $lineseparator = "\n";
 
 //STDOUT
-$STDOUT = fopen('php://stdout', 'w');
+$STDOUT = fopen('invalid_email.log', 'w');
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -79,6 +79,8 @@ if (is_file($csv_file)) {
 	
 }
 fclose( $csvfile );
+
+fclose( $STDOUT );
 
 $conn->close();
 ?>
