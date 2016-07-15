@@ -47,5 +47,34 @@ if(!file_exists($csv_file)) {
     die("File not found. Make sure you specified the correct path.");
 }
 
+if (is_file($csv_file)) {
+	$csvfile = fopen($csv_file, 'r');
+	
+	fgetcsv($csvfile);
+	while(($row = fgetcsv($csvfile,"500",",")) != FALSE){
+		
+		$sqlEmailCheck = $pdo->prepare("SELECT * FROM `users` WHERE email= :email");
+		$sqlEmailCheck->bindValue(':email', $email, PDO::PARAM_STR);
+		$sqlEmailCheck->execute();
+		
+		if (!$sqlEmailCheck){
+			echo $email.$name;
+			die(mysql_error());
+		}elseif (filter_var($email, FILTER_VALIDATE_EMAIL)){
+			$sqlInsert = 'INSERT INTO users(name, surname, email) VALUES(:name, :surname, :email) ON DUPLICATE KEY UPDATE name = :name';
+			$query = $pdo->prepare($sqlInsert);
+			$query->bindParam(':name', $name, PDO::PARAM_STR);
+			$query->bindParam(':surname', $surname, PDO::PARAM_STR);
+			$query->bindParam(':email', $email, PDO::PARAM_STR);
+			$query->execute();
+			//printf ("Updated records: %d\n", mysql_affected_rows());
+		}else{
+			fwrite($STDOUT,"Invalid Email Address: \n".$email."\n");
+		}
+	}
+	
+}
+fclose( $csvfile );
+
 $conn->close();
 ?>
