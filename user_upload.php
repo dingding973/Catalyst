@@ -52,6 +52,10 @@ if (is_file($csv_file)) {
 	
 	fgetcsv($csvfile);
 	while(($row = fgetcsv($csvfile,"500",",")) != FALSE){
+	
+		$name = ucfirst($row[0]);
+		$surname = ucfirst($row[1]);
+		$email = strtolower($row[2]);
 		
 		$sqlEmailCheck = $pdo->prepare("SELECT * FROM `users` WHERE email= :email");
 		$sqlEmailCheck->bindValue(':email', $email, PDO::PARAM_STR);
